@@ -3,6 +3,7 @@ Please note this will only work with GBA version v1.5.0 or greater.
 ### Create a client
 
 ```
+import gba_client
 client_factory = gba_client.ClientFactory()
 client = client_factory.create()
 ```
