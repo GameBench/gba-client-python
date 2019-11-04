@@ -1,33 +1,33 @@
-import gba_client
+import gba
 
-client_factory = gba_client.ClientFactory()
+client_factory = gba.ClientFactory()
 client = client_factory.create()
 
 devices = client.list_devices()
 
 try:
     client.get_device("foo")
-except gba_client.DeviceNotFoundError:
+except gba.DeviceNotFoundError:
     print("Device not found")
 
 try:
     client.list_device_apps("foo")
-except gba_client.DeviceNotFoundError:
+except gba.DeviceNotFoundError:
     print("Device not found")
 
 try:
     session = client.start_session("foo", "bar")
     print(session)
-except gba_client.ServerError:
+except gba.ServerError:
     print("Failed to start session")
-except gba_client.InvalidAuthCredentialsError:
+except gba.InvalidAuthCredentialsError:
     print("Invalid auth credentials")
 
 # sleep(10)
 
 try:
     client.stop_session("baz")
-except gba_client.SessionNotFoundError:
+except gba.SessionNotFoundError:
     print("Session not found")
 
 client.sync()
