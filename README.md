@@ -2,6 +2,10 @@
 
 Please note this will only work with GBA version v1.5.0 or greater.
 
+```
+pip install gb-automation-client
+```
+
 ### Create a client
 
 ```python
