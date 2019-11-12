@@ -2,22 +2,6 @@ import requests
 import os
 
 
-class DeviceNotFoundError(Exception):
-    pass
-
-
-class ServerError(Exception):
-    pass
-
-
-class SessionNotFoundError(Exception):
-    pass
-
-
-class InvalidAuthCredentialsError(Exception):
-    pass
-
-
 class Config:
     def __init__(self, config=None):
         self.baseUrl = ""
@@ -49,8 +33,7 @@ class Client:
                 baseUrl=self.config.baseUrl, deviceId=deviceId
             )
         )
-        if r.status_code == 404:
-            raise DeviceNotFoundError()
+        r.raise_for_status()
         apps = r.json()
         return apps
 
@@ -60,13 +43,13 @@ class Client:
                 baseUrl=self.config.baseUrl, deviceId=deviceId
             )
         )
-        if r.status_code == 404:
-            raise DeviceNotFoundError()
+        r.raise_for_status()
         device = r.json()
         return device
 
     def list_devices(self):
         r = requests.get("{baseUrl}/devices".format(baseUrl=self.config.baseUrl))
+        r.raise_for_status()
         devices = r.json()
         return devices
 
@@ -89,14 +72,8 @@ class Client:
         r = requests.post(
             "{baseUrl}/sessions".format(baseUrl=self.config.baseUrl), json=requestBody
         )
-        if r.status_code == 500:
-            raise ServerError()
-
-        if r.status_code == 401:
-            raise InvalidAuthCredentialsError()
-
-        session = r.json()
-        return session
+        r.raise_for_status()
+        return r.json()
 
     def stop_session(self, sessionId):
         r = requests.get(
@@ -104,12 +81,60 @@ class Client:
                 baseUrl=self.config.baseUrl, sessionId=sessionId
             )
         )
-        if r.status_code == 404:
-            raise SessionNotFoundError()
+        r.raise_for_status()
         return
 
     def sync(self):
         r = requests.post("{baseUrl}/sessions/sync".format(baseUrl=self.config.baseUrl))
+        r.raise_for_status()
+        return
+
+    def get_properties(self):
+        r = requests.get("{baseUrl}/properties".format(baseUrl=self.config.baseUrl))
+        r.raise_for_status()
+        return r.json()
+
+    def set_property(self, key, value):
+        requestBody = {
+            "value": value,
+        }
+        r = requests.put(
+            "{baseUrl}/properties/{key}".format(baseUrl=self.config.baseUrl, key=key),
+            json=requestBody,
+        )
+        r.raise_for_status()
+        return
+
+    def generate_session_json(self, session_path, target_path=None):
+        requestBody = {
+            "sessionPath": session_path,
+        }
+        if target_path:
+            requestBody["targetPath"] = target_path
+
+        r = requests.post(
+            "{baseUrl}/generate-json".format(baseUrl=self.config.baseUrl),
+            json=requestBody,
+        )
+        r.raise_for_status()
+        return
+
+    def enable_wifi_prof(self, device_id):
+        r = requests.post(
+            "{baseUrl}/devices/{deviceId}/enable-wifi-prof".format(
+                baseUrl=self.config.baseUrl, deviceId=device_id
+            )
+        )
+        r.raise_for_status()
+        return
+
+    def disable_wifi_prof(self, device_id):
+        r = requests.post(
+            "{baseUrl}/devices/{deviceId}/disable-wifi-prof".format(
+                baseUrl=self.config.baseUrl, deviceId=device_id
+            )
+        )
+        r.raise_for_status()
         return
 
 
