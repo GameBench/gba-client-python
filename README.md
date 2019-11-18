@@ -19,8 +19,6 @@ You can optionally pass a dictionary when creating the client
 ```python
 config = {
     baseUrl: '',
-    username: '',
-    password: '',
 }
 client = client_factory.create(config)
 ```
@@ -29,8 +27,6 @@ Alternatively, use env vars for configuration
 
 ```
 GBA_BASE_URL=
-GBA_USERNAME=
-GBA_PASSWORD=
 ```
 
 ### List devices
