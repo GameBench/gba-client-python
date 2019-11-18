@@ -5,22 +5,10 @@ import os
 class Config:
     def __init__(self, config=None):
         self.baseUrl = ""
-        self.username = ""
-        self.password = ""
-        self.token = ""
 
         if config is not None:
             if "baseUrl" in config:
                 self.baseUrl = config["baseUrl"]
-
-            if "username" in config:
-                self.username = config["username"]
-
-            if "password" in config:
-                self.password = config["password"]
-
-            if "token" in config:
-                self.token = config["token"]
 
 
 class Client:
@@ -54,19 +42,9 @@ class Client:
         return devices
 
     def start_session(self, deviceId, appId, autoSync=False):
-        passOrToken = self.config.password
-        useToken = False
-
-        if self.config.token:
-            passOrToken = self.config.token
-            useToken = True
-
         requestBody = {
             "deviceId": deviceId,
             "appId": appId,
-            "username": self.config.username,
-            "passOrToken": passOrToken,
-            "useToken": useToken,
             "autoSync": autoSync,
         }
         r = requests.post(
@@ -145,14 +123,5 @@ class ClientFactory:
 
         if os.environ.get("GBA_BASE_URL"):
             config.baseUrl = os.environ.get("GBA_BASE_URL")
-
-        if os.environ.get("GBA_USERNAME"):
-            config.username = os.environ.get("GBA_USERNAME")
-
-        if os.environ.get("GBA_PASSWORD"):
-            config.password = os.environ.get("GBA_PASSWORD")
-
-        if os.environ.get("GBA_TOKEN"):
-            config.token = os.environ.get("GBA_TOKEN")
 
         return Client(config)
