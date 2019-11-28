@@ -72,14 +72,8 @@ class Client:
         r.raise_for_status()
         return r.json()
 
-    def set_property(self, key, value):
-        requestBody = {
-            "value": value,
-        }
-        r = requests.put(
-            "{baseUrl}/properties/{key}".format(baseUrl=self.config.baseUrl, key=key),
-            json=requestBody,
-        )
+    def set_properties(self, properties):
+        r = requests.put("{baseUrl}/properties".format(baseUrl=self.config.baseUrl), json=properties)
         r.raise_for_status()
         return
 
