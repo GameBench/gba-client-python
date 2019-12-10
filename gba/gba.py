@@ -53,14 +53,21 @@ class Client:
         r.raise_for_status()
         return r.json()
 
-    def stop_session(self, sessionId):
-        r = requests.get(
+    def stop_session(self, sessionId, outputJson=False):
+        requestBody = {
+            "includeSessionJsonInResponse": outputJson,
+        }
+        r = requests.post(
             "{baseUrl}/sessions/{sessionId}/stop".format(
                 baseUrl=self.config.baseUrl, sessionId=sessionId
-            )
+            ),
+            json=requestBody
         )
         r.raise_for_status()
-        return
+        if not outputJson:
+            return
+
+        return r.json()
 
     def sync(self):
         r = requests.post("{baseUrl}/sessions/sync".format(baseUrl=self.config.baseUrl))
