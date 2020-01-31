@@ -41,11 +41,12 @@ class Client:
         devices = r.json()
         return devices
 
-    def start_session(self, deviceId, appId, autoSync=False):
+    def start_session(self, deviceId, appId, autoSync=False, screenshots=False):
         requestBody = {
             "deviceId": deviceId,
             "appId": appId,
             "autoSync": autoSync,
+            "screenshots": screenshots,
         }
         r = requests.post(
             "{baseUrl}/sessions".format(baseUrl=self.config.baseUrl), json=requestBody
