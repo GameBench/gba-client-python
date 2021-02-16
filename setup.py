@@ -5,9 +5,9 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="gb-automation-client",
-    version="0.0.4",
-    author="Ade Slade",
-    author_email="ade@gamebench.net",
+    version="0.0.5",
+    author="Emilia",
+    author_email="emilia@gamebench.net",
     description="Python GameBench Automation (GBA) client",
     long_description=long_description,
     long_description_content_type="text/markdown",
